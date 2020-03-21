@@ -1,3 +1,9 @@
+window.setTimeout(function() {
+    $(".alert").fadeTo(1000, 0).slideUp(1000, function(){
+        $(this).remove(); 
+    });
+}, 5000);
+
 var app = angular.module('App', [], ['$httpProvider', function ($httpProvider) {
     $httpProvider.defaults.headers.post['X-CSRF-TOKEN'] = $('meta[name=csrf-token]').attr('content');
 }]);
