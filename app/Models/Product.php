@@ -46,7 +46,7 @@ class Product extends Model
     {
         $isExist = self::where('name', $productName);
         if (!empty($id)) {
-            $isExist = $isExist->where('id', '!=', $id);
+            $isExist = $isExist->where('id', '!=', (int)$id);
         }
         $isExist = $isExist->exists();
 

@@ -96,6 +96,7 @@ class ProductController extends BaseController
 
         $input['featured'] = isset($input['featured']) ? (($input['featured'] == 'on') ? 1 : 0) : 0;
         $product=Product::find($id);
+
         $product->update($input);
         $product=Product::find($id);
 

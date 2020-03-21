@@ -3,23 +3,49 @@ var app = angular.module('App', [], ['$httpProvider', function ($httpProvider) {
 }]);
 
 
-
 app.controller('ProductController', ['$scope', '$http', '$window', function ($scope, $http, $window) {
 
     var apiDomain = 'http://localhost/laravel-angular-image';
     var apiUrl = apiDomain+'/public';
-    $scope.errors = [];
-    $scope.success = [];
-    $scope.categoryList = {};
-    $scope.range = [];
-
-    $scope.files = [];
-    $scope.IsVisible = false;
-    $scope.form = {};
+    $scope.errors        = [];
+    $scope.success       = [];
+    $scope.categoryList  = {};
+    $scope.range         = [];
+    $scope.files         = [];
+    $scope.isVisible     = false;
+    $scope.form          = {};
     $scope.form.imageSrc = '';
-    $scope.form.image = '';
+    $scope.form.image    = '';
+
+    $scope.categoryInfo = function(index) {
+        var request = {
+            method: 'GET',
+            url: apiUrl+'/admin/category/list?need_all=1',
+            headers: {
+                'Content-Type': undefined
+            }
+        };
+
+        $http(request)
+            .then(function success(e) {
+                var catData = {};
+                angular.forEach(e.data.data, function (value, key) {
+                    catData[value.id] = value.name;
+                });
+                $scope.categoryList = catData;
+                //$scope.categoryList = e.data.data;
+            });
+
+    };
+
+    $scope.addProductFrom = function() {
+        $scope.form = {};
+        $scope.isVisible = false;
+        $scope.categoryInfo();
+    };
 
     $scope.listFiles = function (page=1) {
+        $scope.categoryInfo();
         var request = {
             method: 'GET',
             url: apiUrl+'/admin/product/list?page='+page,
@@ -30,13 +56,10 @@ app.controller('ProductController', ['$scope', '$http', '$window', function ($sc
 
         $http(request)
             .then(function success(e) {
-                if ($scope.categoryList.length == 0) {
-                    $scope.categoryList();
-                }
                 $scope.productList  = e.data.moviesData.data;
                 if ($scope.productList.length > 0) {
                     $scope.success = ['Success'];
-                    var response = e.data.moviesData;
+                     var response = e.data.moviesData;
                       $scope.totalPages   = response.last_page;
                       $scope.currentPage  = response.current_page;
 
@@ -47,7 +70,7 @@ app.controller('ProductController', ['$scope', '$http', '$window', function ($sc
                         pages.push(i);
                       }
 
-                          $scope.range = pages; 
+                      $scope.range = pages; 
                 } else {
                     $scope.success = ['There are no any product. Please add new product'];
                 }
@@ -70,19 +93,18 @@ app.controller('ProductController', ['$scope', '$http', '$window', function ($sc
                 'Content-Type': undefined
             }
         };
-
         $http(request)
             .then(function success(e) {
                 $scope.form.imageSrc = e.data.data.image_path;
                 $scope.form.image = e.data.data.image_name;
-                $scope.IsVisible = true;
+                $scope.isVisible = true;
             }, function error(e) {
                 $scope.errors = e.data.errors;
             });
     };
 
 
-    $scope.addProduct = function () {
+    $scope.addProduct= function () {
 
         var request = {
             method: 'POST',
@@ -101,17 +123,15 @@ app.controller('ProductController', ['$scope', '$http', '$window', function ($sc
                 } else {
                     $scope.errors = [];  
                     $scope.productList.unshift(e.data);
-                    console.log($scope.productList);
-                    //$scope.listFiles();
                 }
             }, function error(e) {
                 $scope.errors = e.data.errors;
             });
     };
 
-    $scope.updateProduct = function (id) {
+    $scope.updateProduct = function () {
 
-        var id = $scope.form.category_id;
+        var id = $scope.form.id;
         var request = {
             method: 'POST',
             url: apiUrl+'/admin/product/'+id+'/update',
@@ -138,24 +158,8 @@ app.controller('ProductController', ['$scope', '$http', '$window', function ($sc
     };
 
     $scope.editProduct = function(index) {
-        /*
-        var request = {
-            method: 'GET',
-            url: apiUrl+'/admin/product/list?product_id='+$scope.productList[index]['id'],
-            headers: {
-                'Content-Type': undefined
-            }
-        };
-
-        $http(request)
-            .then(function success(e) {
-                $scope.form = e.data;
-                $scope.success = ['Success'];
-            }, function error(e) {
-                $scope.errors = ['Something Went Wrong. Please try again.'];
-            });
-    */
-        $scope.IsVisible = true;
+        $scope.categoryInfo();
+        $scope.isVisible    = true;
         $scope.form = $scope.productList[index];
         $scope.form.imageSrc = apiUrl+"/"+$scope.form.image;
     };
@@ -173,31 +177,15 @@ app.controller('ProductController', ['$scope', '$http', '$window', function ($sc
 
             $http(request)
                 .then(function success(e) {
-                    $scope.errors = [];
+                    $scope.errors  = [];
+                    $scope.success = ['Success'];
                     $scope.productList.splice(index, 1);
-                    toastr.success(e.data.msg, 'Success Alert', {timeOut: 5000});
-                    //alert(e.data.msg);
                 }, function error(e) {
                     $scope.errors = e.data.errors;
                 });
         }
     };
 
-    $scope.categoryList = function(index) {
-        var request = {
-            method: 'GET',
-            url: apiUrl+'/admin/category/list?need_all=1',
-            headers: {
-                'Content-Type': undefined
-            }
-        };
-
-        $http(request)
-            .then(function success(e) {
-                $scope.categoryList = e.data.data;
-            });
-
-    };
 }]);
 
 app.directive('ngFiles', ['$parse', function ($parse) {
