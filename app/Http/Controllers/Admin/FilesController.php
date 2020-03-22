@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
 use App\File;
 use Symfony\Component\HttpKernel\Tests\Debug\FileLinkFormatterTest;
@@ -9,7 +10,7 @@ use Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Helpers\StringHelper;
 
-class FilesController extends Controller
+class FilesController extends BaseController
 {
     /**
      * Load Files View
@@ -28,7 +29,7 @@ class FilesController extends Controller
      */
     public function listFiles()
     {
-        return ['files' => File::all()];
+        return ['files' => File::orderBy('id', 'DESC')->get()];
     }
 
 

@@ -1,19 +1,31 @@
 <?php
 
+// User sign-up/login related route
+Auth::routes();
 
-Route::get("/", "FilesController@files");
+Route::get('/', 'Frontend\HomeController@index');
+Route::get('/home', 'Frontend\HomeController@index');
 
-Route::post("upload/file", "FilesController@upload");
+// Cart & Products route
+Route::get('products/{id}-{any}', 'Frontend\ProductController@details');
+Route::get('cart/products', 'Frontend\ProductController@cart');
+Route::get('cart/checkout', 'Frontend\ProductController@checkout');
 
-Route::get('/file/list', 'FilesController@listFiles');
+// Admin Route
+Route::prefix('admin')->namespace('Admin')->group(function () {
 
-Route::post("/delete/file", 'FilesController@delete');
+    // File Module
+    Route::get("/", "FilesController@files");
+    Route::post("/upload/file", "FilesController@upload");
+    Route::get('/file/list', 'FilesController@listFiles');
+    Route::post("/delete/file", 'FilesController@delete');
 
-Route::get('/admin/product', 'ProductController@index');
-Route::get('/admin/product/list', 'ProductController@getProductList');
-Route::post('/admin/product/createPrduct', 'ProductController@store');
-Route::post('/admin/api/imageUpload', 'ProductController@imageUpload');
-Route::post('/admin/product/{id}/update', 'ProductController@update');
-Route::delete('/admin/product/{id}', 'ProductController@destroy');
-
-Route::get('/admin/category/list', 'CategoryController@getCategoryList');
+    // Product Modules
+    Route::get('/product', 'ProductController@index');
+    Route::get('/product/list', 'ProductController@getProductList');
+    Route::post('/product/createPrduct', 'ProductController@store');
+    Route::post('/api/imageUpload', 'ProductController@imageUpload');
+    Route::post('/product/{id}/update', 'ProductController@update');
+    Route::delete('/product/{id}', 'ProductController@destroy');
+    Route::get('/category/list', 'CategoryController@getCategoryList');
+});
