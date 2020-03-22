@@ -7,7 +7,7 @@ app.value('movieTitle', 'The Matrix');
 
 app.controller('FileUploadController', ['$scope', '$http', '$window', function ($scope, $http, $window) {
 
-    var apiUrl = 'http://localhost/laravel-angular-image/public';
+    var apiUrl = 'http://localhost/laravel-angular-image/public/admin';
     $scope.errors = [];
 
     $scope.files = [];
