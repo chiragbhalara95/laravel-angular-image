@@ -1,9 +1,17 @@
+
 var BASE_URL = 'http://localhost/laravel-angular-image/public/api/v1';
 var API_TOKEN = readCookie('user_api_token');
 $( document ).ready(function() {
     calculatePrice();
 });
 
+/*
+window.setTimeout(function() {
+    $(".alert").fadeTo(1000, 0).slideUp(1000, function(){
+        $(this).addClass('hide'); 
+    });
+}, 5000);
+*/
 
 /**
  * Add items to cart
@@ -26,8 +34,14 @@ function addToCart(id) {
                 error_message = (response.errors[0]['parameter'] != '' ? response.errors[0]['parameter'] : response.errors[0]['message']);
                 $('#notify-' + id).addClass('alert-warning').show().append(error_message);
             } else {
-                $('#add-cart-' + id).addClass('disabled');
+                /*
+                $('#notify-' + id+' #notify-msg').remove();
+                //$('#add-cart-' + id).addClass('disabled');
                 $('#notify-' + id).addClass('alert-success').show().append('Added!');
+                */
+                $('#notify-' + id+' #notify-msg').remove();
+                $('#notify-' + id).addClass('alert-success').show();
+                $('#notify-' + id).html("<p id='notify-msg'>Added</p>");
             }
         },
         error: function(xhr) {

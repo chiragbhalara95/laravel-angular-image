@@ -91,18 +91,40 @@ class CartController extends Controller
         if($token) {
             $Order = Order::where('token', $token)
                             ->where('product_id', $productID)
-                            ->get()
-                            ->toArray();
+                            ->first();
         } else {
             $Order = Order::where('user_id', $userID)
                         ->where('product_id', $productID)
-                        ->get()
-                        ->toArray();
+                        ->first();
         }
 
         if(!empty($Order)) {
+            $qty = (int)$Order->quantity + 1;
+            $Order->quantity = $qty;
+            $Order->save();
+            /*
+            $Product = Product::find($productID);
+            $orderInfo = [
+                //'user_id'      => $userID,
+                //'token'        => $token,
+                //'product_id'   => $Product->id,
+                //'product_name' => $Product->name,
+                //'product_desc' => $Product->description,
+                //'unit_price'   => $Product->sale_price,
+                //'image'        => $Product->image,
+                'quantity'     => $qty,
+                //'status'       => 1,
+            ];
+            $Order->fill($orderInfo);
+            $Order->save();
+            */
+            $status = 201;
+            $Response = new Response('POST', 'cart', $status);
+            return $Response->Success($Order->getAttributes());
+            /*
             $Response = new Response('POST', 'cart', 400);
             return $Response->Error([new Error(Error::FIELD_INVALID, 'Product is already added to the cart')]);
+            */
         }
 
         $Product = Product::find($productID);
