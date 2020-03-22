@@ -30,7 +30,7 @@
             <tr id="item-{{ $product['id'] }}">
                 <td class="col-md-6">
                     <div class="media">
-                        <img class=" thumbnail pull-left media-object" src="{{ $product['image'] }}" style="width: 72px; height: 72px;">
+                        <img class=" thumbnail pull-left media-object" src="{{url('/')}}{{ $product['image'] }}" style="width: 72px; height: 72px;">
                         <div class="media-body">
                             <h4 class="media-heading"><a href="#">{{ $product['product_name'] }}</a></h4>
                             <h5 class="media-heading"><p class="small">{{ $product['product_desc'] }}</p></h5>

@@ -22,15 +22,15 @@
         @foreach ($products['data'] as $product)
         <div class="col-md-2 col-sm-6 hero-feature">
             <div class="thumbnail">
-                <a href="{{ URL::to('products') . '/' .$product['id'] .'-'. str_slug($product['title']) }}">
-                    <img style="width: 150px; height: 150px;" src="@if(!empty($product['image'])) {{ $product['image'] }} @else http://placehold.it/800x500 @endif" alt="">
+                <a href="{{ URL::to('products') . '/' .$product['id'] .'-'. $product['slug'] }}">
+                    <img style="width: 150px; height: 150px;" src="@if(!empty($product['image'])) {{ url('/') }}{{ $product['image'] }} @else http://placehold.it/800x500 @endif" alt="">
                 </a>
                 <div class="caption">
-                    <h3>{{ $product['title'] }}</h3>
+                    <h3>{{ $product['name'] }}</h3>
                     <p>{{ $product['description'] }}</p>
-                    <span class="btn btn-primary">Price: ${{ $product['original_price'] }}</span>
+                    <span class="btn btn-primary">Price: ${{ $product['sale_price'] }}</span>
                     <p>
-                        <a id="add-cart-{{$product['id']}}" href="Javascript:void(0)" onclick="addToCart({{$product['id']}})" class="btn btn-primary">Add to cart!</a> <a href="{{ URL::to('products') . '/' .$product['id'] .'-'. str_slug($product['title']) }}" class="btn btn-default">View Details</a>
+                        <a id="add-cart-{{$product['id']}}" href="Javascript:void(0)" onclick="addToCart({{$product['id']}})" class="btn btn-primary">Add to cart!</a> <a href="{{ URL::to('products') . '/' .$product['id'] .'-'. $product['slug'] }}" class="btn btn-default">View Details</a>
                     <div class="alert" style="display: none" id="notify-{{$product['id']}}">
                         <a href="#" class="close" data-dismiss="alert">&times;</a>
                         <p id="notify-msg"></p>

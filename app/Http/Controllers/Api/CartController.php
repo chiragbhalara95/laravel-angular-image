@@ -113,9 +113,9 @@ class CartController extends Controller
                 $Order->user_id = $userID;
                 $Order->token = $token;
                 $Order->product_id = $Product->id;
-                $Order->product_name = $Product->title;
+                $Order->product_name = $Product->name;
                 $Order->product_desc = $Product->description;
-                $Order->unit_price = $Product->original_price;
+                $Order->unit_price = $Product->sale_price;
                 $Order->image = $Product->image;
                 $Order->quantity = 1;
                 $Order->status = 1;

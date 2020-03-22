@@ -1,7 +1,15 @@
 <?php
 
+// User sign-up/login related route
+Auth::routes();
+
 Route::get('/', 'Frontend\HomeController@index');
 Route::get('/home', 'Frontend\HomeController@index');
+
+// Cart & Products route
+Route::get('products/{id}-{any}', 'Frontend\ProductController@details');
+Route::get('cart/products', 'Frontend\ProductController@cart');
+Route::get('cart/checkout', 'Frontend\ProductController@checkout');
 
 // Admin Route
 Route::prefix('admin')->namespace('Admin')->group(function () {

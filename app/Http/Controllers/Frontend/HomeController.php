@@ -14,7 +14,7 @@ class HomeController extends BaseController
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index() {
-        //$this->LoadUserToken();
+        $this->LoadUserToken();
         $request = \Request::create('/api/v1/products');
         $response =  \Route::dispatch($request);
         $products = json_decode($response->getContent(), true);
